@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../dist/js/vue.js"></script>
+    <script src="../index.js"></script>
+</head>
+<style>
+    *{
+        margin:0;
+        padding:0;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        -o-box-sizing: border-box;
+        -ms-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    input,button{
+        outline:none;
+    }
+    li{
+        list-style: none;
+    }
+    h2{
+        text-align: center;
+        margin:25px 0;
+    }
+    .wrap{
+        width:400px;
+        margin: 0 auto;
+        background: #ececec;
+        -webkit-border-radius: 6px;
+        -moz-border-radius: 6px;
+        border-radius: 6px;
+        padding:12px 20px;
+    }
+    ul.list li{
+        cursor: pointer;
+        line-height:30px;
+        padding:0 12px;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+    }
+    ul.list li:hover{
+        background: #d5d5d5;
+    }
+    .keyWord{
+        border:1px solid #666;
+        height:35px;
+        padding:12px 16px;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+        width:304px;
+    }
+    .keyBtn{
+        height:35px;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+        background: #d5d5d5;
+        border:0;
+        padding:0 12px;
+        cursor: pointer;
+    }
+</style>
+<body>
+<div id="app">
+    <h2>自定义的下拉框</h2>
+    <custom-select btn-value="查询" :list="list1"></custom-select>
+    <h2>自定义的下拉框</h2>
+    <custom-select btn-value="搜索" :list="list2"></custom-select>
+</div>
+<script>
+    var data = {
+        list1:["北京","上海","杭州"],
+        list2:["17-02-18","17-02-19","17-02-20"]
+    };
+    //注册
+    Vue.component("custom-select",{
+        data:function(){ //data必须写成一个函数，否则将会共享影响其它共用的组建
+            return {
+                selectShow:false,
+                val:""
+           };
+        },
+        props:[
+            "btnValue",
+            "list"
+        ],
+        template:`<section class="wrap">
+        <div class="searchIpt clearFix">
+            <div class="clearFix">
+                <input type="text" class="keyWord" :value="val" @click="selectShow=!selectShow" />
+                <input type="button" :value="btnValue" class="keyBtn">
+                <span></span>
+            </div>
+            <custom-list @receive="changeValueHandle" v-show="selectShow" :list="list"></custom-list>
+        </div>
+    </section>`,
+        methods:{
+            changeValueHandle(value){
+                this.val=value
+            }
+        }
+    });
+
+    Vue.component("custom-list",{
+        props:[
+            "list"
+        ],
+        template:`<ul class="list" >
+                    <li v-for="item of list" @click="selectValueHandle(item)">{{item}}</li>
+                </ul>`,
+        methods:{
+            selectValueHandle(item){
+                //在子组件中有交互；
+                //告知父级，改变val值，需要触发一个自定义事件；
+                this.$emit("receive",item)
+            }
+        }
+    });
+
+    new Vue({
+        el:"#app",
+        data:data
+    })
+</script>
+</body>
+</html>

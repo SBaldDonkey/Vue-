@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="dist/js/vue.js"></script>
+</head>
+<style>
+    .red{
+        color: red;
+    }
+</style>
+<body>
+
+<div id="demo">
+    <span :cutomId="id">{{message}}</span>
+    <span :class="{red:allClass}">hello,miaov</span>
+</div>
+
+<div>
+    1.new Vue
+        1(1.el:(挂载元素选择器):"#id";
+        1(2.data:(数据):"{message:"hello,Vue!"}";
+        1(3.template:(模板):"<div/>";
+        1(4.methods:(事件):" {onAlaert(){}}",v-on:click="onAlaert" ";
+        1(5.render(h){}:():"createElement(标签名，[数据对象]，子元素)"
+</div>
+
+<script>
+    //数据
+    let obj={
+        message:"hello,Vue!",
+        id:"123",
+        allClass:true
+    };
+    var vm = new Vue({
+        //挂载元素选择器
+        el:"#demo",
+        //数据
+        data:obj,
+
+
+    });
+    console.log(vm)
+</script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../dist/js/vue.js"></script>
+</head>
+<style>
+    *{
+        margin:0;
+        padding:0;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        -o-box-sizing: border-box;
+        -ms-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    input,button{
+        outline:none;
+    }
+    li{
+        list-style: none;
+    }
+    header{
+        width:100%;
+        height:45px;
+        background: #d85c45;
+    }
+    .page-content{
+        width:1200px;
+        margin:0 auto;
+    }
+    .page-content h2{
+        color: #fff;
+        line-height:40px;
+        font-weight: normal;
+    }
+    .main{
+        width:1200px;
+        margin:0 auto;
+    }
+    .main>h1{
+        font-weight: normal;
+        font-size:22px;
+        display: block;
+        width:100%;
+        margin:15px 0;
+    }
+    .main>input{
+        width:100%;
+        height:36px;
+        line-height:36px;
+        padding:0 16px;
+    }
+    .main>ul{
+        padding:15px 0;
+        overflow: hidden;
+    }
+    .main>ul>li:nth-of-type(1){
+        float: left;
+        width:50%;
+        color: #d85c45;
+        line-height:45px;
+    }
+    .main>ul>li:nth-of-type(2){
+        width:50%;
+        float: right;
+        text-align: center;
+    }
+    .main>ul>li a{
+        font-size:16px;
+        height:45px;
+        line-height:45px;
+        color: #666;
+        width:150px;
+        padding:10px 20px;
+        text-decoration: none;
+    }
+    .main>ul>li a.active{
+        border:1px solid #000;
+        color: #000;
+    }
+    .main>h3{
+        font-weight: normal;
+        margin:15px 0;
+    }
+    .tasks .no-task-tip{
+        background: #fff;
+        font-size: 16px;
+        padding:10px;
+        border:1px solid #666;
+        display: block;
+        width:100%;
+        color: #666;
+        border-bottom:0;
+    }
+    .tasks .todo-list{
+        width:100%;
+        border-bottom:1px solid #666;
+    }
+    .tasks .todo-list li{
+        border:1px solid #666;
+        padding:10px;
+        border-bottom:0;
+        position: relative;
+        color: #666;
+        height:40px;
+    }
+    .tasks .todo-list li input{
+        float: left;
+        margin-top:3px;
+    }
+    .tasks .todo-list li label{
+        display: block;
+        width: 100%;
+        line-height: 19px;
+        margin-left: 30px;
+    }
+    .tasks .todo-list li.completed label{
+        text-decoration: line-through;
+        color: #adadad;
+    }
+    .tasks .todo-list li:hover{
+        background: #f1f1f1;
+    }
+    .tasks .todo-list li:hover .destroy{
+        display: block;
+    }
+    .destroy{
+        width:20px;
+        height:20px;
+        position: absolute;
+        right:10px;
+        top:50%;
+        margin-top:-10px;
+        background: none;
+        border:0;
+        cursor: pointer;
+        display: none;
+    }
+    .destroy:after{
+        content: 'X';
+        display: block;
+        color: #d85c45;
+    }
+    .edit{
+        display: none;
+    }
+    .editing div{
+        display: none;
+    }
+    .editing div label{
+        line-height: 40px;
+    }
+    .editing input.edit{
+        display: block;
+    }
+</style>
+<body>
+<header>
+    <div class="page-content">
+        <h2>任务计划列表</h2>
+    </div>
+</header>
+<div class="main">
+        <h1>添加任务：</h1>
+        <input type="text" @keyUp.enter="addTodo" v-model="todo" placeholder="例如：吃饭睡觉打豆豆" class="task-input">
+        <ul v-show="list.length">
+            <li>{{noCheckeLength}}项任务未完成</li>
+            <li class="action" id="action">
+                <a href="#all" :class="{active:visibility==='all'}">所有任务</a>
+                <a href="#unfinished" :class="{active:visibility==='unfinished'}">为完成任务</a>
+                <a href="#finished" :class="{active:visibility==='finished'}">以完成任务</a>
+            </li>
+        </ul>
+        <h3>任务列表：</h3>
+    <div class="tasks">
+        <span class="no-task-tip" v-show="!list.length">还没有添加任何任务</span>
+        <ul class="todo-list">
+            <li class="todo" :class="{completed:item.isChecked,editing:item === edtorTodos}" v-for="item in filteredList">
+                <div class="view">
+                    <input class="toggle" type="checkbox" v-model="item.isChecked">
+                    <label @dblclick="edtorTodo(item)">{{item.title}}</label>
+                    <button type="button" class="destroy" @click="deleteTodo(item)"></button>
+                </div>
+                <input
+                        v-foucs="edtorTodos===item"
+                        @blur="edtorTodoed(item)"
+                        @keyUp.enter="edtorTodoed(item)"
+                        @keyUp.esc="cancelTodo(item)"
+                        type="text"
+                        class="edit"
+                        v-model="item.title"
+                >
+            </li>
+        </ul>
+    </div>
+</div>
+<script type="text/javascript" src="../dist/js/app.js"></script>
+</body>
+</html>
